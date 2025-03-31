@@ -5,15 +5,15 @@ import Login from "./Login.jsx";
 import Navber from "./Navber.jsx";
 import Footer from "./Footer.jsx";
 import Home from "./Home.jsx";
-import { LoginProvider } from "./contexts/LoginContext.jsx";
+// import { LoginProvider } from "./contexts/LoginContext.jsx";
 import AuthProvider from "./contexts/authContext.jsx";
 
 function App() {
-  const [userLogedIn, setUserLogedIn] = useState(false);
+  // const [userLogedIn, setUserLogedIn] = useState(false);
 
   return (
     <AuthProvider>
-      <LoginProvider value={{ userLogedIn, setUserLogedIn }}>
+      {/* <LoginProvider value={{ userLogedIn, setUserLogedIn }}> */}
         <BrowserRouter>
           <Navber />
           <Routes>
@@ -23,7 +23,7 @@ function App() {
           </Routes>
           <Footer />
         </BrowserRouter>
-      </LoginProvider>
+      {/* </LoginProvider> */}
     </AuthProvider>
   );
 }

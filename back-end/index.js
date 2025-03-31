@@ -39,19 +39,19 @@ const generateJWT = (id) => {
 };
 
 //middleware
-function authenticate(req, res, next) {
-  const token = req.header("Authorization");
-  if (!token)
-    return res.status(401).json({ message: "No token, authorization denied" });
+// function authenticate(req, res, next) {
+//   const token = req.header("Authorization");
+//   if (!token)
+//     return res.status(401).json({ message: "No token, authorization denied" });
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
-  }
-}
+//   try {
+//     const decoded = jwt.verify(token, secretKey);
+//     req.user = decoded;
+//     next();
+//   } catch (error) {
+//     res.status(401).json({ message: "Invalid token" });
+//   }
+// }
 
 //register end-popint
 app.post("/register", async (req, res) => {
@@ -67,13 +67,13 @@ app.post("/register", async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    const data = {
-      email: email,
+    const newUser = new User({
+      email,
       password: hash,
-      name: name,
-      token: token,
-    };
-    await User.insertMany(data);
+      name,
+    });
+  
+    await newUser.save(); // Use save() instead of insertMany()
 
     return res.send("user created successfully :)");
   }
@@ -94,18 +94,18 @@ app.post("/login", async (req, res) => {
       const token = generateJWT(user._id);
       console.log(token);
 
-      res.cookie("token", token, {
-        httpOnly: true, // Prevents JS access
-        secure: false, // Set to true for HTTPS
-        sameSite: "lax", // Allows frontend to receive cookie
-        expires: new Date(Date.now() + 9000000),
-      });
+      // res.cookie("token", token, {
+      //   httpOnly: true, // Prevents JS access
+      //   secure: false, // Set to true for HTTPS
+      //   sameSite: "lax", // Allows frontend to receive cookie
+      //   expires: new Date(Date.now() + 9000000),
+      // });
 
       return res.json({
         loged: true,
         name: user.name,
         msg: `welcome ${user.name}`,
-        token: token
+        token: token,
       });
     } else {
       return res.json({ loged: false, msg: "enter valid password !" });
