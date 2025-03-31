@@ -1,10 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "./contexts/authContext";
 
 function Home() {
-
   const { user } = useContext(AuthContext);
+
+  const [loading, setLoading] = useState(true);
+
+  // Simulate token verification delay
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 500); // Simulating token check delay
+  }, []);
+
+  if (loading) {
+    return (
+      <p className="text-center text-gray-600">Checking authentication...</p>
+    );
+  }
 
   if (!user) {
     return <Navigate to="/login" />;
